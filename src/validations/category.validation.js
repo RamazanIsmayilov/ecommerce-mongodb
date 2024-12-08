@@ -1,13 +1,23 @@
 const Joi = require("joi");
 
-const category = Joi.object({
-  name: Joi.string().trim().required(),
-  slug: Joi.string().trim().required(),
-  parentId: Joi.string().pattern(/^[0-9a-fA-F]{24}$/).allow(null)
+const create = Joi.object({
+  name: Joi.string().required().trim(),
+  slug: Joi.string()
+    .optional()
+    .pattern(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
+  order: Joi.number().default(0).optional(),
+  parentId: Joi.string().alphanum().optional(),
 });
 
+const update = create.concat(
+  Joi.object({
+    name: Joi.string().optional().trim(),
+  })
+);
+
 const categoryValidation = {
-  category,
+  create,
+  update
 };
 
 module.exports = categoryValidation;

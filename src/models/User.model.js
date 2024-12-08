@@ -25,6 +25,16 @@ const userSchema = new Schema(
       type: Number,
       default: 0,
     },
+    avatar: {
+      type: Schema.Types.ObjectId,
+      ref: "Image",
+      default: null
+    },
+    role: {
+      type: String,
+      enum: ["user", "admin"],
+      default: "user",
+    },
   },
   { timestamps: true }
 );

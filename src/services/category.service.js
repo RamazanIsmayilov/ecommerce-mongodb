@@ -11,14 +11,10 @@ const addCategory = async (params) => {
 };
 
 const allCategories = async () => {
-  const categories = await Category.find().populate("parentId");
+  const categories = await Category.find()
+    .sort({ order: 1 })
+    .populate("parentId");
   return categories;
-};
-
-const singleCategory = async (id) => {
-  const singleCategory = await Category.findById(id).populate("parentId");
-  if (!singleCategory) throw new NotFoundError("Category is not found");
-  return singleCategory;
 };
 
 const updateCategory = async (params, id) => {
@@ -32,13 +28,18 @@ const updateCategory = async (params, id) => {
 const deleteCategory = async (id) => {
   const deletedCategory = await Category.findByIdAndDelete(id);
   if (!deletedCategory) throw new NotFoundError("Category is not found");
+
+  const subCategories = await Category.find({ parentId: id });
+
+  for (const subCategory of subCategories) {
+    await deleteCategory(subCategory._id);
+  }
   return deletedCategory;
 };
 
 const categoryService = {
   addCategory,
   allCategories,
-  singleCategory,
   updateCategory,
   deleteCategory,
 };

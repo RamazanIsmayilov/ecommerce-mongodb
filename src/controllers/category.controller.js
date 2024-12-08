@@ -18,16 +18,6 @@ const allCategories = async (req, res, next) => {
   }
 };
 
-const singleCategory = async (req, res, next) => {
-  try {
-    const singleCategory = await categoryService.singleCategory(req.params.id);
-    console.log(req.params.id);
-    res.status(200).json(singleCategory);
-  } catch (error) {
-    next(error);
-  }
-};
-
 const updateCategory = async (req, res, next) => {
   try {
     const updatedCategory = await categoryService.updateCategory(
@@ -52,7 +42,6 @@ const deleteCategory = async (req, res, next) => {
 const categoryController = {
   addCategory,
   allCategories,
-  singleCategory,
   updateCategory,
   deleteCategory,
 };
